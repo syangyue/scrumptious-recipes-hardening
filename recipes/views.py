@@ -7,16 +7,18 @@ from django.views.generic.list import ListView
 from recipes.forms import RatingForm
 from recipes.forms import RecipeForm
 from recipes.models import Recipe
-\
 
 
 def log_rating(request, recipe_id):
     if request.method == "POST":
         form = RatingForm(request.POST)
         if form.is_valid():
-            rating = form.save(commit=False)
-            rating.recipe = Recipe.objects.get(pk=recipe_id)
-            rating.save()
+            try:
+                rating = form.save(commit=False)
+                rating.recipe = Recipe.objects.get(pk=recipe_id)
+                rating.save()
+            except Recipe.DoesNotExist:
+                return redirect("recipes_list")
     return redirect("recipe_detail", pk=recipe_id)
 
 
