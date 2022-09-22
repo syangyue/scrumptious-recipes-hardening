@@ -17,9 +17,14 @@ class Recipe(models.Model):
     image = models.URLField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(
+        USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True
+    )
 
     def __str__(self):
-        return str(self.author)
+        return self.name + " by " + str(self.author)
 
 
 class Measure(models.Model):
@@ -80,3 +85,19 @@ class Rating(models.Model):
         related_name="ratings",
         on_delete=models.CASCADE,
     )
+
+
+class ShoppingItem(models.Model):
+    user = models.ForeignKey(
+        USER_MODEL,
+        related_name="shoppingitems",
+        on_delete=models.CASCADE
+    )
+    food_item = models.ForeignKey(
+        "FoodItem",
+        related_name="shoppingitems",
+        on_delete=models.PROTECT
+    )
+
+    def __str__(self):
+        return str(self.user)

@@ -24,6 +24,10 @@ class TagCreateView(LoginRequiredMixin, CreateView):
     fields = ["name"]
     success_url = reverse_lazy("tags_list")
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
 
 class TagUpdateView(LoginRequiredMixin, UpdateView):
     model = Tag

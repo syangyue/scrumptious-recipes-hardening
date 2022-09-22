@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block pagination %}
+  <div class="pagination">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+      {% endif %}
+      <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+      <div>
+        <span>
+          <a href="{% url 'meal_plan_create' %}">create</a>
+        </span>
+      </div>
+    </span>
+  </div>
+{% endblock pagination %}
+{% block content %}
+  <main class="recipe-grid">
+    {% for item in mealplan_list %}
+      <div class="recipe-card">
+        <h2 class="recipe-card-title">
+          <a href="{% url 'meal_plan_detail' item.pk %}">{{ item.name }}</a>
+        </h2>
+        {% for i in item.recipes.all %}
+          <p>
+            <a href="{% url 'recipe_detail' i.pk %}">{{ i.name }}</a>
+          </p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </main>
+{% endblock content %}
